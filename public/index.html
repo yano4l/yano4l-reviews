@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yano4l Reviews</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <header class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
+      <h1 class="text-2xl font-black tracking-wider text-emerald-400">YANO4L REVIEWS</h1>
+      <div id="host-toggle-container" class="hidden text-sm bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-2">
+        <label for="free-toggle" class="cursor-pointer font-medium text-slate-300">Free Submissions Open:</label>
+        <input type="checkbox" id="free-toggle" class="w-4 h-4 accent-emerald-500 cursor-pointer">
+      </div>
+    </header>
+
+    <main class="grid gap-6 md:grid-cols-3 mb-12">
+      <!-- Standard Tier -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-slate-400 font-bold">Standard</span>
+          <div class="text-3xl font-black mt-2 mb-4">$5</div>
+          <p class="text-slate-400 text-sm mb-6">Standard review placed in the normal queue.</p>
+        </div>
+        <button onclick="submitReview('standard')" class="w-full bg-slate-800 hover:bg-slate-700 font-bold py-2.5 rounded-lg transition">Submit Standard</button>
+      </div>
+
+      <!-- Free Tier -->
+      <div class="bg-slate-900 border border-emerald-500/30 rounded-xl p-6 flex flex-col justify-between relative overflow-hidden">
+        <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[10px] font-extrabold px-3 py-0.5 rounded-bl uppercase">Active</div>
+        <div>
+          <span class="text-xs uppercase tracking-widest text-emerald-400 font-bold">Free Review</span>
+          <div class="text-3xl font-black mt-2 mb-4">$0</div>
+          <p class="text-slate-400 text-sm mb-6">Submit your track for free when host toggle is open.</p>
+        </div>
+        <button onclick="submitReview('free')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-lg transition">Submit Free</button>
+      </div>
+
+      <!-- Skip the Line Tier -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-purple-400 font-bold">Skip the Line</span>
+          <div class="text-3xl font-black mt-2 mb-4">$15</div>
+          <p class="text-slate-400 text-sm mb-6">Jump straight toward the front of the active review queue.</p>
+        </div>
+        <button onclick="submitReview('skip')" class="w-full bg-purple-600 hover:bg-purple-500 font-bold py-2.5 rounded-lg transition">Skip the Line</button>
+      </div>
+    </main>
+
+    <section class="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
+      <h2 class="text-lg font-bold mb-4">Live Song Queue</h2>
+      <div id="queue-list" class="space-y-3">
+        <p class="text-slate-500 text-sm">Loading queue...</p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    async function submitReview(tier) {
+      const artist = prompt("Enter Artist Name:");
+      const track = prompt("Enter Track Title / Link:");
+      if (!artist || !track) return;
+
+      if (tier === 'free') {
+        const res = await fetch('/.netlify/functions/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ artist, track, tier: 'free' })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert("Free review submitted successfully!");
+          location.reload();
+        } else {
+          alert(data.error || "Submission failed.");
+        }
+      } else {
+        alert("Redirecting to Stripe checkout for " + tier + " tier...");
+      }
+    }
+  </script>
+</body>
+</html>
 
