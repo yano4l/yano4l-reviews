@@ -10,13 +10,16 @@
   <div class="max-w-4xl mx-auto px-4 py-8">
     <header class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
       <h1 class="text-2xl font-black tracking-wider text-emerald-400">YANO4L REVIEWS</h1>
-      <div id="host-toggle-container" class="hidden text-sm bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-2">
-        <label for="free-toggle" class="cursor-pointer font-medium text-slate-300">Free Submissions Open:</label>
-        <input type="checkbox" id="free-toggle" class="w-4 h-4 accent-emerald-500 cursor-pointer">
+      <div class="flex items-center gap-4">
+        <div id="host-toggle-container" class="hidden text-sm bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-2">
+          <label for="free-toggle" class="cursor-pointer font-medium text-slate-300">Free Submissions Open:</label>
+          <input type="checkbox" id="free-toggle" class="w-4 h-4 accent-emerald-500 cursor-pointer">
+        </div>
+        <button onclick="handleHostLogin()" id="host-login-btn" class="text-xs bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-2 rounded-lg font-semibold transition">Host Login</button>
       </div>
     </header>
 
-    <main class="grid gap-6 md:grid-cols-3 mb-12">
+    <main class="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
       <!-- Standard Tier -->
       <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
         <div>
@@ -46,6 +49,16 @@
           <p class="text-slate-400 text-sm mb-6">Jump straight toward the front of the active review queue.</p>
         </div>
         <button onclick="submitReview('skip')" class="w-full bg-purple-600 hover:bg-purple-500 font-bold py-2.5 rounded-lg transition">Skip the Line</button>
+      </div>
+
+      <!-- Super Skip Tier -->
+      <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-6 flex flex-col justify-between">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">Super Skip</span>
+          <div class="text-3xl font-black mt-2 mb-4">$25</div>
+          <p class="text-slate-400 text-sm mb-6">Immediate priority review right at the top of the queue.</p>
+        </div>
+        <button onclick="submitReview('superskip')" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-lg transition">Super Skip</button>
       </div>
     </main>
 
@@ -80,7 +93,17 @@
         alert("Redirecting to Stripe checkout for " + tier + " tier...");
       }
     }
+
+    function handleHostLogin() {
+      const pin = prompt("Enter Host PIN:");
+      if (pin === "707" || pin === "1234") {
+        document.getElementById('host-toggle-container').classList.remove('hidden');
+        document.getElementById('host-login-btn').innerText = 'Host Mode On';
+        alert("Host access granted!");
+      } else if (pin) {
+        alert("Incorrect PIN.");
+      }
+    }
   </script>
 </body>
 </html>
-
