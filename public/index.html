@@ -3,104 +3,158 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yano4l Reviews</title>
+  <title>YANO4L REVIEWS — Artist Management & Live Queue</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen">
-  <div class="max-w-4xl mx-auto px-4 py-8">
-    <header class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-      <h1 class="text-2xl font-black tracking-wider text-emerald-400">YANO4L REVIEWS</h1>
-      <div class="flex items-center gap-4">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <header class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-slate-800 pb-6 gap-4">
+      <div>
+        <h1 class="text-2xl font-black tracking-wider text-emerald-400">YANO4L REVIEWS</h1>
+        <p class="text-xs text-slate-400 mt-1">Submit Song Live Queue | TikTok: @topbreed707 | IG: @Yano.4l</p>
+      </div>
+      <div class="flex items-center gap-3">
         <div id="host-toggle-container" class="hidden text-sm bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-2">
-          <label for="free-toggle" class="cursor-pointer font-medium text-slate-300">Free Submissions Open:</label>
+          <label for="free-toggle" class="cursor-pointer font-medium text-slate-300">Free Submissions Open</label>
           <input type="checkbox" id="free-toggle" class="w-4 h-4 accent-emerald-500 cursor-pointer">
         </div>
-        <button onclick="handleHostLogin()" id="host-login-btn" class="text-xs bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-2 rounded-lg font-semibold transition">Host Login</button>
+        <button onclick="openHostLogin()" id="host-login-btn" class="text-xs bg-slate-900 hover:bg-slate-800 border border-slate-700 px-3 py-2 rounded-lg font-semibold transition">Host Login</button>
       </div>
     </header>
 
-    <main class="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
-      <!-- Standard Tier -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
-        <div>
-          <span class="text-xs uppercase tracking-widest text-slate-400 font-bold">Standard</span>
-          <div class="text-3xl font-black mt-2 mb-4">$5</div>
-          <p class="text-slate-400 text-sm mb-6">Standard review placed in the normal queue.</p>
-        </div>
-        <button onclick="submitReview('standard')" class="w-full bg-slate-800 hover:bg-slate-700 font-bold py-2.5 rounded-lg transition">Submit Standard</button>
-      </div>
+    <section class="mb-12 text-center">
+      <h2 class="text-3xl font-black mb-2">Get Your Track Heard by Yano4l</h2>
+      <p class="text-slate-400 text-sm max-w-2xl mx-auto">Submit your unreleased or released music for honest reaction, professional critique, and artist management insight. Pay securely by credit or debit card.</p>
+    </section>
 
+    <main class="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
       <!-- Free Tier -->
-      <div class="bg-slate-900 border border-emerald-500/30 rounded-xl p-6 flex flex-col justify-between relative overflow-hidden">
+      <div class="bg-slate-900 border border-emerald-500/30 rounded-xl p-6 flex flex-col justify-between relative overflow-hidden shadow-lg">
         <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[10px] font-extrabold px-3 py-0.5 rounded-bl uppercase">Active</div>
         <div>
           <span class="text-xs uppercase tracking-widest text-emerald-400 font-bold">Free Review</span>
-          <div class="text-3xl font-black mt-2 mb-4">$0</div>
-          <p class="text-slate-400 text-sm mb-6">Submit your track for free when host toggle is open.</p>
+          <div class="text-3xl font-black mt-2 mb-1">$0<span class="text-xs font-normal text-slate-400">/track</span></div>
+          <ul class="text-slate-400 text-xs space-y-2 my-4">
+            <li>✓ Standard queue entry</li>
+            <li>✓ Considered during live stream</li>
+            <li>✓ No payment required</li>
+          </ul>
         </div>
-        <button onclick="submitReview('free')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-lg transition">Submit Free</button>
+        <button onclick="submitReview('free')" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2.5 rounded-lg transition shadow-md">Submit Free</button>
       </div>
 
-      <!-- Skip the Line Tier -->
-      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
+      <!-- Standard Tier -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between shadow-lg">
+        <div>
+          <span class="text-xs uppercase tracking-widest text-slate-400 font-bold">Standard Review</span>
+          <div class="text-3xl font-black mt-2 mb-1">$5<span class="text-xs font-normal text-slate-400">/track</span></div>
+          <ul class="text-slate-400 text-xs space-y-2 my-4">
+            <li>✓ Standard queue position</li>
+            <li>✓ Full track listen-through</li>
+            <li>✓ Honest verbal feedback</li>
+          </ul>
+        </div>
+        <button onclick="submitReview('standard')" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold py-2.5 rounded-lg transition">Pay $5 with Card</button>
+      </div>
+
+      <!-- Priority Tier -->
+      <div class="bg-slate-900 border border-purple-500/30 rounded-xl p-6 flex flex-col justify-between shadow-lg">
         <div>
           <span class="text-xs uppercase tracking-widest text-purple-400 font-bold">Skip the Line</span>
-          <div class="text-3xl font-black mt-2 mb-4">$15</div>
-          <p class="text-slate-400 text-sm mb-6">Jump straight toward the front of the active review queue.</p>
+          <div class="text-3xl font-black mt-2 mb-1">$15<span class="text-xs font-normal text-slate-400">/track</span></div>
+          <ul class="text-slate-400 text-xs space-y-2 my-4">
+            <li>✓ Jump ahead of regular queue</li>
+            <li>✓ Detailed breakdown & tips</li>
+            <li>✓ Priority live reaction</li>
+          </ul>
         </div>
-        <button onclick="submitReview('skip')" class="w-full bg-purple-600 hover:bg-purple-500 font-bold py-2.5 rounded-lg transition">Skip the Line</button>
+        <button onclick="submitReview('skip')" class="w-full bg-purple-600 hover:bg-purple-500 text-slate-100 font-bold py-2.5 rounded-lg transition shadow-md">Pay $15 with Card</button>
       </div>
 
-      <!-- Super Skip Tier -->
-      <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-6 flex flex-col justify-between">
+      <!-- VIP Super Skip Tier -->
+      <div class="bg-slate-900 border border-amber-500/30 rounded-xl p-6 flex flex-col justify-between shadow-lg">
         <div>
           <span class="text-xs uppercase tracking-widest text-amber-400 font-bold">Super Skip</span>
-          <div class="text-3xl font-black mt-2 mb-4">$25</div>
-          <p class="text-slate-400 text-sm mb-6">Immediate priority review right at the top of the queue.</p>
+          <div class="text-3xl font-black mt-2 mb-1">$25<span class="text-xs font-normal text-slate-400">/track</span></div>
+          <ul class="text-slate-400 text-xs space-y-2 my-4">
+            <li>✓ Absolute front of queue</li>
+            <li>✓ Direct management critique</li>
+            <li>✓ Social shoutout consideration</li>
+          </ul>
         </div>
-        <button onclick="submitReview('superskip')" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-lg transition">Super Skip</button>
+        <button onclick="submitReview('superskip')" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-lg transition shadow-md">Pay $25 with Card</button>
       </div>
     </main>
 
-    <section class="bg-slate-900/50 border border-slate-800 rounded-xl p-6">
-      <h2 class="text-lg font-bold mb-4">Live Song Queue</h2>
+    <section class="bg-slate-900/50 border border-slate-800 rounded-xl p-6 shadow-xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-lg font-bold">Live Submission Queue</h2>
+        <span class="text-xs text-emerald-400 flex items-center gap-1.5 font-medium">● Live Sync</span>
+      </div>
       <div id="queue-list" class="space-y-3">
-        <p class="text-slate-500 text-sm">Loading queue...</p>
+        <p class="text-slate-500 text-sm">Loading queue…</p>
       </div>
     </section>
+
+    <footer class="mt-12 text-center text-xs text-slate-500 border-t border-slate-900 pt-6">
+      <p>Yano4l Artist Management © 2026. All rights reserved.</p>
+      <p class="mt-2"><a href="https://www.tiktok.com/@topbreed707" target="_blank" class="hover:text-slate-300 underline">TikTok (@topbreed707)</a> | <a href="https://www.instagram.com/Yano.4l" target="_blank" class="hover:text-slate-300 underline">Instagram (@Yano.4l)</a></p>
+    </footer>
+  </div>
+
+  <!-- Host Login Modal -->
+  <div id="host-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-sm w-full">
+      <h3 class="text-lg font-bold mb-2">Host Login</h3>
+      <p class="text-xs text-slate-400 mb-4">Enter your host PIN.</p>
+      <input type="password" id="host-pin-input" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-slate-100 mb-4 focus:outline-none focus:border-emerald-500" placeholder="Enter PIN">
+      <div class="flex justify-end gap-2">
+        <button onclick="closeHostLogin()" class="px-4 py-2 bg-slate-800 text-xs font-semibold rounded-lg">Cancel</button>
+        <button onclick="verifyHostPin()" class="px-4 py-2 bg-emerald-500 text-slate-950 text-xs font-bold rounded-lg">Access Dashboard</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    async function submitReview(tier) {
-      const artist = prompt("Enter Artist Name:");
-      const track = prompt("Enter Track Title / Link:");
+    function submitReview(tier) {
+      const artist = prompt("Artist / Stage Name:");
+      const track = prompt("Song Title / Link:");
       if (!artist || !track) return;
 
       if (tier === 'free') {
-        const res = await fetch('/.netlify/functions/submit', {
+        fetch('/.netlify/functions/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ artist, track, tier: 'free' })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          alert("Free review submitted successfully!");
-          location.reload();
-        } else {
-          alert(data.error || "Submission failed.");
-        }
+        }).then(res => {
+          if (res.ok) {
+            alert("Free review submitted successfully!");
+            location.reload();
+          } else {
+            alert("Submission failed or free tier is currently closed.");
+          }
+        }).catch(() => alert("Submission network error."));
       } else {
-        alert("Redirecting to Stripe checkout for " + tier + " tier...");
+        alert("Redirecting to secure Stripe card payment for " + tier + " tier...");
       }
     }
 
-    function handleHostLogin() {
-      const pin = prompt("Enter Host PIN:");
+    function openHostLogin() {
+      document.getElementById('host-modal').classList.remove('hidden');
+    }
+
+    function closeHostLogin() {
+      document.getElementById('host-modal').classList.add('hidden');
+    }
+
+    function verifyHostPin() {
+      const pin = document.getElementById('host-pin-input').value;
       if (pin === "707" || pin === "1234") {
         document.getElementById('host-toggle-container').classList.remove('hidden');
-        document.getElementById('host-login-btn').innerText = 'Host Mode On';
+        document.getElementById('host-login-btn').innerText = 'Host Dashboard';
+        closeHostLogin();
         alert("Host access granted!");
-      } else if (pin) {
+      } else {
         alert("Incorrect PIN.");
       }
     }
