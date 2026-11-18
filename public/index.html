@@ -23,7 +23,7 @@
       <div class="flex items-center gap-3">
         <div id="host-toggle-container" class="hidden text-xs bg-slate-900 border border-emerald-500/40 px-3 py-1.5 rounded-lg flex items-center gap-2">
           <label for="free-toggle" class="cursor-pointer font-medium text-emerald-400">Free Submissions Open</label>
-          <input type="checkbox" id="free-toggle" class="w-4 h-4 accent-emerald-500 cursor-pointer">
+          <input type="checkbox" id="free-toggle" class="w-4 h-4 accent-emerald-500 cursor-pointer" checked>
         </div>
         <button onclick="openHostLogin()" id="host-login-btn" class="text-xs bg-slate-900 hover:bg-slate-800 border border-slate-700 px-4 py-2 rounded-xl font-bold transition">Host Login</button>
       </div>
@@ -40,11 +40,31 @@
       </div>
     </div>
 
+    <!-- Host Dashboard Section (Hidden by default) -->
+    <section id="host-dashboard-section" class="hidden mb-12 bg-slate-900 border border-emerald-500/40 rounded-2xl p-6 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <span class="text-[10px] uppercase tracking-widest text-emerald-400 font-bold">Host Dashboard</span>
+          <h3 class="text-xl font-black">MANAGE SUBMISSIONS</h3>
+          <p class="text-xs text-slate-400" id="dashboard-stats">0 waiting · 0 reviewed · $0.00 total paid</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-slate-300 flex items-center gap-1 cursor-pointer">
+            <input type="checkbox" id="show-done-toggle" class="accent-emerald-500"> Show done
+          </label>
+          <button onclick="loadQueue()" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-lg font-bold">Refresh</button>
+        </div>
+      </div>
+      <div id="host-queue-list" class="space-y-3">
+        <p class="text-slate-500 text-sm">No submissions yet.</p>
+      </div>
+    </section>
+
     <section id="packages" class="mb-16">
       <h3 class="text-xs uppercase tracking-widest text-slate-500 font-bold mb-6 text-center">Select Submission Package</h3>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <!-- Free Tier -->
-        <div class="bg-slate-900/90 border border-emerald-500/40 rounded-2xl p-6 flex flex-col justify-between relative shadow-xl">
+        <div id="free-tier-card" class="bg-slate-900/90 border border-emerald-500/40 rounded-2xl p-6 flex flex-col justify-between relative shadow-xl">
           <div class="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[10px] font-black px-3 py-0.5 rounded-bl uppercase">Active</div>
           <div>
             <span class="text-xs uppercase tracking-widest text-emerald-400 font-bold">Free Review</span>
@@ -167,6 +187,19 @@
   <script>
     let selectedTier = 'standard';
 
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('free-toggle');
+      if (toggle) {
+        toggle.addEventListener('change', (e) => {
+          const freeCard = document.getElementById('free-tier-card');
+          if (freeCard) {
+            freeCard.style.display = e.target.checked ? 'flex' : 'none';
+          }
+        });
+      }
+      loadQueue();
+    });
+
     function openSubmitModal(tier) {
       selectedTier = tier;
       document.getElementById('modal-title').innerText = tier === 'free' ? 'Submit Free Review' : tier.toUpperCase() + ' REVIEW';
@@ -199,13 +232,35 @@
         if (res.ok) {
           alert("Free review submitted successfully!");
           closeSubmitModal();
-          location.reload();
+          loadQueue();
         } else {
-          alert(data.error || "Submission failed.");
+          alert(data.error || "Submission failed or free tier is currently closed.");
         }
       } else {
         alert("Redirecting to secure Stripe card payment for " + selectedTier + " tier...");
         closeSubmitModal();
+      }
+    }
+
+    async function loadQueue() {
+      try {
+        const res = await fetch('/.netlify/functions/queue');
+        const data = await res.json();
+        const queueList = document.getElementById('queue-list');
+        if (data && data.length > 0) {
+          queueList.innerHTML = data.map((item, idx) => `
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex justify-between items-center">
+              <div>
+                <span class="text-xs text-emerald-400 font-bold">#${idx + 1} · ${item.tier.toUpperCase()}</span>
+                <h4 class="font-bold text-slate-100">${item.artist} - "${item.track}"</h4>
+              </div>
+            </div>
+          `).join('');
+        } else {
+          queueList.innerHTML = `<p class="text-slate-500 text-sm">No tracks in queue right now.</p>`;
+        }
+      } catch (err) {
+        document.getElementById('queue-list').innerHTML = `<p class="text-slate-500 text-sm">Queue syncing...</p>`;
       }
     }
 
@@ -219,10 +274,10 @@
 
     function verifyHostPin() {
       const pin = document.getElementById('host-pin-input').value;
-      // PIN restored back to your preferred code or 707/1234
       if (pin === "4352") {
         document.getElementById('host-toggle-container').classList.remove('hidden');
-        document.getElementById('host-login-btn').innerText = 'Host Dashboard';
+        document.getElementById('host-dashboard-section').classList.remove('hidden');
+        document.getElementById('host-login-btn').innerText = 'Host Dashboard Active';
         closeHostLogin();
         alert("Host access granted!");
       } else {
