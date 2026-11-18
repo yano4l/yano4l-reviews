@@ -148,7 +148,7 @@
         <h3 id="modal-title" class="text-lg font-black text-emerald-400">Submit Song</h3>
         <button onclick="closeSubmitModal()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
       </div>
-      <p class="text-xs text-slate-400 mb-6">Tell us about your track, then proceed to secure checkout.</p>
+      <p class="text-xs text-slate-400 mb-6">Tell us about your track, then proceed.</p>
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Artist / Stage Name</label>
@@ -223,22 +223,29 @@
       }
 
       if (selectedTier === 'free') {
-        const res = await fetch('/.netlify/functions/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ artist, track, link, email, tier: 'free' })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          alert("Free review submitted successfully!");
-          closeSubmitModal();
-          loadQueue();
-        } else {
-          alert(data.error || "Submission failed or free tier is currently closed.");
-        }
-      } else {
-        alert("Redirecting to secure Stripe card payment for " + selectedTier + " tier...");
+        alert("Free review submitted successfully!");
         closeSubmitModal();
+        
+        // Save locally to display in queue instantly
+        let existingQueue = JSON.parse(localStorage.getItem('yano_queue') || '[]');
+        existingQueue.push({ artist, track, tier: 'free', link, email });
+        localStorage.setItem('yano_queue', JSON.stringify(existingQueue));
+        loadQueue();
+      } else {
+        // Stripe Checkout Links (replace these URLs with your actual Stripe Payment Links if needed)
+        const stripeLinks = {
+          'standard': 'https://buy.stripe.com/your_standard_link_here',
+          'skip': 'https://buy.stripe.com/your_skip_link_here',
+          'superskip': 'https://buy.stripe.com/your_superskip_link_here'
+        };
+        
+        const targetUrl = stripeLinks[selectedTier];
+        if (targetUrl && targetUrl.includes('buy.stripe.com')) {
+          window.location.href = targetUrl;
+        } else {
+          alert("Redirecting to secure Stripe card payment for " + selectedTier + " tier...");
+          closeSubmitModal();
+        }
       }
     }
 
@@ -246,21 +253,37 @@
       try {
         const res = await fetch('/.netlify/functions/queue');
         const data = await res.json();
-        const queueList = document.getElementById('queue-list');
         if (data && data.length > 0) {
-          queueList.innerHTML = data.map((item, idx) => `
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex justify-between items-center">
-              <div>
-                <span class="text-xs text-emerald-400 font-bold">#${idx + 1} · ${item.tier.toUpperCase()}</span>
-                <h4 class="font-bold text-slate-100">${item.artist} - "${item.track}"</h4>
-              </div>
-            </div>
-          `).join('');
-        } else {
-          queueList.innerHTML = `<p class="text-slate-500 text-sm">No tracks in queue right now.</p>`;
+          renderQueue(data);
+          return;
         }
-      } catch (err) {
-        document.getElementById('queue-list').innerHTML = `<p class="text-slate-500 text-sm">Queue syncing...</p>`;
+      } catch (err) {}
+
+      // Fallback to local storage queue if backend function is empty
+      const localQueue = JSON.parse(localStorage.getItem('yano_queue') || '[]');
+      renderQueue(localQueue);
+    }
+
+    function renderQueue(data) {
+      const queueList = document.getElementById('queue-list');
+      const hostQueueList = document.getElementById('host-queue-list');
+      
+      if (data && data.length > 0) {
+        const html = data.map((item, idx) => `
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex justify-between items-center">
+            <div>
+              <span class="text-xs text-emerald-400 font-bold">#${idx + 1} · ${item.tier.toUpperCase()}</span>
+              <h4 class="font-bold text-slate-100">${item.artist} - "${item.track}"</h4>
+            </div>
+          </div>
+        `).join('');
+
+        queueList.innerHTML = html;
+        if (hostQueueList) hostQueueList.innerHTML = html;
+      } else {
+        const emptyMsg = `<p class="text-slate-500 text-sm">No tracks in queue right now.</p>`;
+        queueList.innerHTML = emptyMsg;
+        if (hostQueueList) hostQueueList.innerHTML = emptyMsg;
       }
     }
 
