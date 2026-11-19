@@ -32,7 +32,7 @@
 </head>
 <body class="cyber-grid min-h-screen">
   <div class="max-w-4xl mx-auto px-4 py-8">
-    <!-- Top Header matching screenshot -->
+    <!-- Top Header -->
     <header class="flex items-center justify-between gap-4 pb-6 mb-8 border-b border-emerald-900/40">
       <div class="flex items-center gap-3.5">
         <div class="y-badge w-11 h-11 rounded-xl flex items-center justify-center font-black text-2xl shrink-0">
@@ -48,18 +48,16 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-3">
-        <button
-          id="auth-action-btn"
-          onclick="handleHeaderAuthClick()"
-          class="bg-[#141917] hover:bg-[#1d2521] text-slate-200 border border-slate-700/80 text-xs font-extrabold tracking-wider uppercase px-4 py-2.5 rounded-lg transition"
-        >
-          HOST LOGIN
-        </button>
-      </div>
+      <button
+        id="auth-action-btn"
+        onclick="handleHeaderAuthClick()"
+        class="bg-[#141917] hover:bg-[#1d2521] text-slate-200 border border-slate-700/80 text-xs font-extrabold tracking-wider uppercase px-4 py-2.5 rounded-lg transition"
+      >
+        HOST LOGIN
+      </button>
     </header>
 
-    <!-- Host Dashboard Card matching screenshot -->
+    <!-- Host Dashboard Card -->
     <section id="host-dashboard-section" class="hidden green-glow-box rounded-2xl p-6 sm:p-7 mb-10">
       <div class="flex flex-wrap items-start justify-between gap-4 mb-5">
         <div>
@@ -75,37 +73,27 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-3">
-          <!-- Added Free Submissions Toggle -->
           <label class="flex items-center gap-2 bg-[#0b110e] border border-emerald-500/40 px-3 py-2 rounded-lg text-xs font-bold text-emerald-300 cursor-pointer select-none">
             <input type="checkbox" id="free-toggle" class="w-4 h-4 accent-emerald-500 cursor-pointer" checked />
-            <span>FREE SUBMISSIONS</span>
+            <span>FREE SUBMISSIONS OPEN</span>
           </label>
 
-          <!-- Original SHOW DONE & REFRESH controls -->
           <label class="flex items-center gap-2 bg-[#171b19] border border-slate-700/70 px-3 py-2 rounded-lg text-xs font-extrabold tracking-wider uppercase text-slate-200 cursor-pointer select-none">
             <input type="checkbox" id="show-done-toggle" class="w-3.5 h-3.5 rounded accent-emerald-500 cursor-pointer" />
             <span>SHOW DONE</span>
           </label>
 
           <button
-            onclick="loadQueue()"
+            onclick="refreshAllHostData()"
             class="bg-[#232629] hover:bg-[#2f3337] border border-slate-600/60 text-xs font-extrabold tracking-wider uppercase text-white px-4 py-2 rounded-lg transition"
           >
             REFRESH
           </button>
-
-          <button
-            onclick="clearLocalQueue()"
-            class="bg-red-950/60 hover:bg-red-900/70 border border-red-500/40 text-xs font-extrabold tracking-wider uppercase text-red-300 px-3 py-2 rounded-lg transition"
-          >
-            CLEAR
-          </button>
         </div>
       </div>
 
-      <!-- Column Headers matching screenshot -->
       <div class="overflow-x-auto">
-        <div class="min-w-[540px]">
+        <div class="min-w-[560px]">
           <div class="grid grid-cols-12 gap-2 text-[11px] font-extrabold tracking-[0.14em] uppercase text-slate-400 pb-3 border-b border-slate-700/70">
             <div class="col-span-4">ARTIST &amp; TRACK</div>
             <div class="col-span-3">TRACK</div>
@@ -116,17 +104,17 @@
 
           <div id="host-queue-list" class="divide-y divide-slate-800/80">
             <div class="py-6 text-center text-sm text-slate-400">
-              No paid submissions yet.
+              No submissions yet.
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Hero / Package Selection Section -->
+    <!-- Hero -->
     <section class="text-center mb-10">
       <span class="inline-block px-4 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 text-xs font-bold tracking-widest uppercase mb-4">
-        Official Song Submissions
+        Official Song Submissions // Card Only
       </span>
       <h2 class="text-3xl sm:text-5xl font-black tracking-tight mb-3">
         GET YOUR TRACK HEARD <span class="text-emerald-400">BY YANO4L</span>
@@ -154,6 +142,7 @@
             </ul>
           </div>
           <button
+            id="free-tier-btn"
             onclick="openSubmitModal('free')"
             class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider py-3 rounded-xl transition"
           >
@@ -211,7 +200,7 @@
             </ul>
           </div>
           <button
-            onclick="openSubmitModal('superskip')"
+            onclick="openSubmitModal('super')"
             class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider py-3 rounded-xl transition"
           >
             Pay $25
@@ -230,7 +219,7 @@
         <span class="text-xs font-bold text-emerald-400">● Live</span>
       </div>
       <div id="queue-list" class="space-y-3">
-        <p class="text-sm text-slate-500">No tracks in queue yet.</p>
+        <p class="text-sm text-slate-500">Loading queue…</p>
       </div>
     </section>
 
@@ -265,6 +254,10 @@
           <input id="sub-link" type="text" placeholder="https://..." class="w-full bg-[#070b09] border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" />
         </div>
         <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Genre (Optional)</label>
+          <input id="sub-genre" type="text" placeholder="Hip-Hop, Regional Mexican, R&B..." class="w-full bg-[#070b09] border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" />
+        </div>
+        <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">Email</label>
           <input id="sub-email" type="email" placeholder="you@email.com" class="w-full bg-[#070b09] border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" />
         </div>
@@ -283,11 +276,10 @@
   <div id="host-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
     <div class="bg-[#0e1512] border border-emerald-500/40 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
       <h3 class="text-lg font-black text-white mb-1">Host Login</h3>
-      <p class="text-xs text-slate-400 mb-4">Enter your 4-digit PIN.</p>
+      <p class="text-xs text-slate-400 mb-4">Enter your host PIN.</p>
       <input
         id="host-pin-input"
         type="password"
-        maxlength="4"
         placeholder="••••"
         class="w-full bg-[#070b09] border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white mb-4 focus:outline-none focus:border-emerald-500"
       />
@@ -303,24 +295,18 @@
   </div>
 
   <script>
-    const HOST_PIN = "4352";
+    const TIER_INFO = {
+      free: { label: "Free Review", price: 0 },
+      standard: { label: "Standard Review", price: 5 },
+      skip: { label: "Skip the Line", price: 15 },
+      super: { label: "Super Skip", price: 25 },
+    };
+
     let selectedTier = "free";
     let isHostLoggedIn = false;
-    let queueCache = [];
-
-    // Paste your real Stripe Payment Links here when ready:
-    const STRIPE_LINKS = {
-      standard: "",
-      skip: "",
-      superskip: ""
-    };
-
-    const TIER_PRICE = {
-      free: 0,
-      standard: 5,
-      skip: 15,
-      superskip: 25
-    };
+    let freeSubmissionsOpen = true;
+    let publicQueue = [];
+    let hostSubmissions = [];
 
     function escapeHtml(str) {
       return String(str || "")
@@ -342,33 +328,47 @@
       }
     }
 
-    function applyFreeToggle(isOpen) {
+    function applyFreeUi(enabled) {
+      freeSubmissionsOpen = Boolean(enabled);
       const card = document.getElementById("free-tier-card");
       const badge = document.getElementById("free-badge");
-      const checkbox = document.getElementById("free-toggle");
-      if (checkbox) checkbox.checked = isOpen;
-      if (card) card.style.display = isOpen ? "flex" : "none";
-      if (badge) badge.textContent = isOpen ? "Open" : "Closed";
-      localStorage.setItem("yano4l_free_open", isOpen ? "true" : "false");
+      const toggle = document.getElementById("free-toggle");
+      if (toggle) toggle.checked = freeSubmissionsOpen;
+      if (card) card.style.display = freeSubmissionsOpen ? "flex" : "none";
+      if (badge) badge.textContent = freeSubmissionsOpen ? "Open" : "Closed";
     }
 
-    function setHostSession(loggedIn) {
+    async function loadSettings() {
+      try {
+        const res = await fetch("/api/settings", { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          if (typeof data.freeEnabled === "boolean") {
+            applyFreeUi(data.freeEnabled);
+          }
+        }
+      } catch {}
+    }
+
+    async function setHostSession(loggedIn) {
       isHostLoggedIn = loggedIn;
       const authBtn = document.getElementById("auth-action-btn");
       const dashSection = document.getElementById("host-dashboard-section");
       if (loggedIn) {
         authBtn.textContent = "LOG OUT";
         dashSection.classList.remove("hidden");
+        await refreshAllHostData();
       } else {
         authBtn.textContent = "HOST LOGIN";
         dashSection.classList.add("hidden");
+        hostSubmissions = [];
       }
-      renderQueue(queueCache);
     }
 
-    function handleHeaderAuthClick() {
+    async function handleHeaderAuthClick() {
       if (isHostLoggedIn) {
-        setHostSession(false);
+        await fetch("/api/host/logout", { method: "POST" }).catch(() => {});
+        await setHostSession(false);
       } else {
         openHostLogin();
       }
@@ -383,26 +383,56 @@
       document.getElementById("host-modal").classList.add("hidden");
     }
 
-    function verifyHostPin() {
+    async function verifyHostPin() {
       const pin = document.getElementById("host-pin-input").value.trim();
-      if (pin === HOST_PIN) {
+      if (!pin) return alert("Enter your PIN.");
+
+      try {
+        const res = await fetch("/api/host/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pin }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          return alert(data.error || "Incorrect PIN.");
+        }
         closeHostLogin();
-        setHostSession(true);
-      } else {
-        alert("Incorrect PIN.");
+        await setHostSession(true);
+      } catch {
+        alert("Could not reach server to verify PIN.");
+      }
+    }
+
+    async function toggleFreeSubmissions(enabled) {
+      const prev = freeSubmissionsOpen;
+      applyFreeUi(enabled);
+      try {
+        const res = await fetch("/api/host/settings/free", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ enabled }),
+        });
+        if (!res.ok) {
+          applyFreeUi(prev);
+          alert("Could not update free submissions setting.");
+        }
+      } catch {
+        applyFreeUi(prev);
+        alert("Network error updating free submissions setting.");
       }
     }
 
     function openSubmitModal(tier) {
-      if (tier === "free" && localStorage.getItem("yano4l_free_open") === "false") {
-        alert("Free submissions are currently closed.");
-        return;
+      if (tier === "free" && !freeSubmissionsOpen) {
+        return alert("Free submissions are currently closed.");
       }
       selectedTier = tier;
+      const info = TIER_INFO[tier] || TIER_INFO.standard;
       document.getElementById("modal-title").textContent =
-        tier === "free" ? "Submit Free Review" : `${tier.toUpperCase()} Review ($${TIER_PRICE[tier]})`;
+        tier === "free" ? "Submit Free Review" : `${info.label} ($${info.price})`;
       document.getElementById("modal-submit-btn").textContent =
-        tier === "free" ? "Submit Free Track" : `Continue ($${TIER_PRICE[tier]})`;
+        tier === "free" ? "Submit Free Track" : `Continue to Checkout ($${info.price})`;
       document.getElementById("submit-modal").classList.remove("hidden");
     }
 
@@ -411,177 +441,216 @@
     }
 
     async function processSubmission() {
-      const artist = document.getElementById("sub-artist").value.trim();
-      const track = document.getElementById("sub-track").value.trim();
-      const link = formatUrl(document.getElementById("sub-link").value);
+      const artistName = document.getElementById("sub-artist").value.trim();
+      const trackTitle = document.getElementById("sub-track").value.trim();
+      const trackLink = formatUrl(document.getElementById("sub-link").value);
+      const genre = document.getElementById("sub-genre").value.trim();
       const email = document.getElementById("sub-email").value.trim();
 
-      if (!artist || !track) {
-        alert("Please enter both artist name and song title.");
+      if (!artistName || !trackTitle) {
+        return alert("Please enter both artist name and song title.");
+      }
+      if (!trackLink) {
+        return alert("Please enter a valid track link.");
+      }
+
+      const btn = document.getElementById("modal-submit-btn");
+      btn.disabled = true;
+
+      try {
+        if (selectedTier === "free") {
+          const res = await fetch("/api/submit-free", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ artistName, trackTitle, trackLink, genre, email }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            return alert(data.error || "Could not submit free track.");
+          }
+          document.getElementById("sub-artist").value = "";
+          document.getElementById("sub-track").value = "";
+          document.getElementById("sub-link").value = "";
+          document.getElementById("sub-genre").value = "";
+          document.getElementById("sub-email").value = "";
+          closeSubmitModal();
+          await loadPublicQueue();
+          alert("Track submitted to the live queue!");
+        } else {
+          const res = await fetch("/api/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ tier: selectedTier, artistName, trackTitle, trackLink, genre, email }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data.url) {
+            return alert(data.error || "Could not start Stripe checkout.");
+          }
+          window.location.href = data.url;
+        }
+      } catch {
+        alert("Network error while submitting track.");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function confirmCheckoutIfReturned() {
+      const params = new URLSearchParams(window.location.search);
+      const checkoutStatus = params.get("checkout");
+      const sessionId = params.get("session_id");
+
+      if (checkoutStatus === "success" && sessionId) {
+        try {
+          await fetch("/api/checkout/confirm", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sessionId }),
+          });
+        } catch {}
+        window.history.replaceState({}, document.title, window.location.pathname + "#queue");
+      } else if (checkoutStatus === "cancelled") {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+
+    async function loadPublicQueue() {
+      try {
+        const res = await fetch("/api/queue", { cache: "no-store" });
+        if (res.ok) {
+          publicQueue = await res.json();
+        }
+      } catch {}
+      renderPublicQueue();
+    }
+
+    async function loadHostSubmissions() {
+      if (!isHostLoggedIn) return;
+      try {
+        const res = await fetch("/api/host/submissions", { cache: "no-store" });
+        if (res.status === 401) {
+          await setHostSession(false);
+          return;
+        }
+        if (res.ok) {
+          hostSubmissions = await res.json();
+        }
+      } catch {}
+      renderHostSubmissions();
+    }
+
+    async function refreshAllHostData() {
+      await Promise.all([loadSettings(), loadPublicQueue(), loadHostSubmissions()]);
+    }
+
+    async function updateSubmissionStatus(id, nextStatus) {
+      try {
+        const res = await fetch(`/api/host/submissions/${encodeURIComponent(id)}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: nextStatus }),
+        });
+        if (res.ok) {
+          await Promise.all([loadPublicQueue(), loadHostSubmissions()]);
+        }
+      } catch {}
+    }
+
+    function renderPublicQueue() {
+      const el = document.getElementById("queue-list");
+      if (!Array.isArray(publicQueue) || publicQueue.length === 0) {
+        el.innerHTML = `<p class="text-sm text-slate-500">No tracks in queue yet.</p>`;
         return;
       }
 
-      if (selectedTier === "free") {
-        try {
-          await fetch("/.netlify/functions/submit", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ artist, track, link, email, tier: "free", amount: 0 })
-          });
-        } catch {}
-
-        const existing = JSON.parse(localStorage.getItem("yano4l_queue") || "[]");
-        existing.push({
-          id: String(Date.now()),
-          artist,
-          track,
-          link,
-          email,
-          tier: "free",
-          amount: 0,
-          done: false
-        });
-        localStorage.setItem("yano4l_queue", JSON.stringify(existing));
-
-        document.getElementById("sub-artist").value = "";
-        document.getElementById("sub-track").value = "";
-        document.getElementById("sub-link").value = "";
-        document.getElementById("sub-email").value = "";
-
-        closeSubmitModal();
-        await loadQueue();
-        alert("Free submission added to the queue.");
-      } else {
-        const stripeUrl = formatUrl(STRIPE_LINKS[selectedTier]);
-        if (stripeUrl && stripeUrl.includes("stripe.com")) {
-          window.location.href = stripeUrl;
-        } else {
-          alert(`Add your real Stripe Payment Link for "${selectedTier}" inside STRIPE_LINKS in index.html.`);
-        }
-      }
+      el.innerHTML = publicQueue.map((item, idx) => {
+        const tierLabel = escapeHtml((TIER_INFO[item.tier]?.label || item.tier || "free").toUpperCase());
+        const statusLabel = escapeHtml((item.status || "in_queue").replace("_", " ").toUpperCase());
+        return `
+          <div class="bg-[#070b09] border border-slate-800 rounded-xl p-4 flex items-center justify-between gap-4">
+            <div class="min-w-0">
+              <span class="text-xs font-extrabold text-emerald-400">#${idx + 1} · ${tierLabel} · ${statusLabel}</span>
+              <p class="font-bold text-white truncate">${escapeHtml(item.artistName)} — "${escapeHtml(item.trackTitle)}"</p>
+              ${item.genre ? `<p class="text-xs text-slate-400">${escapeHtml(item.genre)}</p>` : ""}
+            </div>
+          </div>
+        `;
+      }).join("");
     }
 
-    function toggleDone(id) {
-      const existing = JSON.parse(localStorage.getItem("yano4l_queue") || "[]");
-      const updated = existing.map((item) => item.id === id ? { ...item, done: !item.done } : item);
-      localStorage.setItem("yano4l_queue", JSON.stringify(updated));
-      loadQueue();
-    }
-
-    function clearLocalQueue() {
-      if (!confirm("Clear submissions from this browser?")) return;
-      localStorage.removeItem("yano4l_queue");
-      loadQueue();
-    }
-
-    async function loadQueue() {
-      let backendItems = [];
-      try {
-        const res = await fetch("/.netlify/functions/queue");
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data)) backendItems = data;
-        }
-      } catch {}
-
-      const localItems = JSON.parse(localStorage.getItem("yano4l_queue") || "[]");
-      queueCache = [...backendItems, ...localItems];
-      renderQueue(queueCache);
-    }
-
-    function renderQueue(items) {
-      const list = Array.isArray(items) ? items : [];
-      const waiting = list.filter((i) => !i.done);
-      const reviewed = list.filter((i) => i.done);
-      const totalPaid = list.reduce((sum, i) => sum + Number(i.amount || 0), 0);
-
+    function renderHostSubmissions() {
+      const listEl = document.getElementById("host-queue-list");
       const statsEl = document.getElementById("dashboard-stats");
+      const showDone = document.getElementById("show-done-toggle")?.checked || false;
+
+      const waiting = hostSubmissions.filter((i) => i.status !== "done");
+      const reviewed = hostSubmissions.filter((i) => i.status === "done");
+      const paidTotalCents = hostSubmissions.reduce((sum, i) => sum + Number(i.amountCents || 0), 0);
+
       if (statsEl) {
-        statsEl.textContent = `${waiting.length} waiting · ${reviewed.length} reviewed · $${totalPaid.toFixed(2)} total paid`;
+        statsEl.textContent = `${waiting.length} waiting · ${reviewed.length} reviewed · $${(paidTotalCents / 100).toFixed(2)} total paid`;
       }
 
-      // Public queue
-      const publicQueueEl = document.getElementById("queue-list");
-      if (waiting.length > 0) {
-        publicQueueEl.innerHTML = waiting.map((item, idx) => {
-          const safeLink = formatUrl(item.link);
-          return `
-            <div class="bg-[#070b09] border border-slate-800 rounded-xl p-4 flex items-center justify-between gap-4">
-              <div class="min-w-0">
-                <span class="text-xs font-extrabold text-emerald-400">#${idx + 1} · ${escapeHtml((item.tier || "free").toUpperCase())}</span>
-                <p class="font-bold text-white truncate">${escapeHtml(item.artist)} — "${escapeHtml(item.track)}"</p>
-              </div>
+      const rows = hostSubmissions.filter((i) => (showDone ? true : i.status !== "done"));
+      if (rows.length === 0) {
+        listEl.innerHTML = `<div class="py-6 text-center text-sm text-slate-400">No submissions to show.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = rows.map((item) => {
+        const safeLink = formatUrl(item.trackLink);
+        const paidDollars = (Number(item.amountCents || 0) / 100).toFixed(2);
+        const isDone = item.status === "done";
+        const nextStatus = isDone ? "in_queue" : "done";
+
+        return `
+          <div class="grid grid-cols-12 gap-2 items-center py-3 text-xs sm:text-sm ${isDone ? "opacity-55" : ""}">
+            <div class="col-span-4 font-bold text-white truncate">
+              ${escapeHtml(item.artistName)} — "${escapeHtml(item.trackTitle)}"
+            </div>
+            <div class="col-span-3 truncate">
               ${
                 safeLink
-                  ? `<a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/40 px-3 py-1.5 rounded-lg shrink-0">Listen ↗</a>`
-                  : `<span class="text-xs text-slate-500 shrink-0">No link</span>`
+                  ? `<a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline font-semibold">Listen ↗</a>`
+                  : `<span class="text-slate-500">Audio / None</span>`
               }
             </div>
-          `;
-        }).join("");
-      } else {
-        publicQueueEl.innerHTML = `<p class="text-sm text-slate-500">No tracks in queue yet.</p>`;
-      }
-
-      // Host dashboard table
-      const showDone = document.getElementById("show-done-toggle")?.checked || false;
-      const hostRows = list.filter((i) => showDone ? true : !i.done);
-      const hostListEl = document.getElementById("host-queue-list");
-
-      if (hostRows.length > 0) {
-        hostListEl.innerHTML = hostRows.map((item) => {
-          const safeLink = formatUrl(item.link);
-          const paidAmt = Number(item.amount || 0).toFixed(2);
-          return `
-            <div class="grid grid-cols-12 gap-2 items-center py-3 text-xs sm:text-sm ${item.done ? "opacity-55" : ""}">
-              <div class="col-span-4 font-bold text-white truncate">
-                ${escapeHtml(item.artist)} — "${escapeHtml(item.track)}"
-              </div>
-              <div class="col-span-3 truncate">
-                ${
-                  safeLink
-                    ? `<a href="${escapeHtml(safeLink)}" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline font-semibold">Listen ↗</a>`
-                    : `<span class="text-slate-500">None</span>`
-                }
-              </div>
-              <div class="col-span-2 uppercase text-xs font-bold text-slate-300">
-                ${escapeHtml(item.tier || "free")}
-              </div>
-              <div class="col-span-1 text-slate-300">
-                $${paidAmt}
-              </div>
-              <div class="col-span-2 flex justify-end items-center gap-2">
-                <span class="text-[11px] font-bold uppercase ${item.done ? "text-emerald-400" : "text-amber-400"}">
-                  ${item.done ? "Done" : "Waiting"}
-                </span>
-                ${
-                  item.id
-                    ? `<button onclick="toggleDone('${escapeHtml(item.id)}')" class="bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-md">${item.done ? "Undo" : "Done"}</button>`
-                    : ""
-                }
-              </div>
+            <div class="col-span-2 uppercase text-xs font-bold text-slate-300">
+              ${escapeHtml(item.tier || "free")}
             </div>
-          `;
-        }).join("");
-      } else {
-        hostListEl.innerHTML = `<div class="py-6 text-center text-sm text-slate-400">No submissions yet.</div>`;
-      }
+            <div class="col-span-1 text-slate-300">
+              $${paidDollars}
+            </div>
+            <div class="col-span-2 flex justify-end items-center gap-2">
+              <span class="text-[11px] font-bold uppercase ${isDone ? "text-emerald-400" : "text-amber-400"}">
+                ${escapeHtml(item.status || "in_queue")}
+              </span>
+              <button
+                onclick="updateSubmissionStatus(${Number(item.id)}, '${nextStatus}')"
+                class="bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-bold px-2.5 py-1 rounded-md"
+              >
+                ${isDone ? "Reopen" : "Done"}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const savedFree = localStorage.getItem("yano4l_free_open");
-      applyFreeToggle(savedFree === null ? true : savedFree === "true");
-
+    document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("free-toggle").addEventListener("change", (e) => {
-        applyFreeToggle(e.target.checked);
+        toggleFreeSubmissions(e.target.checked);
       });
 
       document.getElementById("show-done-toggle").addEventListener("change", () => {
-        renderQueue(queueCache);
+        renderHostSubmissions();
       });
 
-      loadQueue();
+      await confirmCheckoutIfReturned();
+      await Promise.all([loadSettings(), loadPublicQueue()]);
     });
   </script>
 </body>
 </html>
+
+               
